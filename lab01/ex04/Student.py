@@ -5,6 +5,4 @@ class Student:
         self._sex = sex
         self._major = major
         self._avgScore = agvScore
-        self._study =""
-
-    
+        self._academicRanking = ""
