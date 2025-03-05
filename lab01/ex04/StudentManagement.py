@@ -1,73 +1,94 @@
 from Student import Student
 
+
 class StudentManagement:
-    listStudent = []
+    def __init__(self):
+        self.listStudent = []
 
     def quantityStudent(self):
-        return self.listStudent.__len__
-    
+        return len(self.listStudent)
+
     def generateID(self):
-        maxID = 1
-        if(self.quantityStudent() > 0):
-            maxID = self.listStudent[0]._id
-            for item in self.listStudent:
-                if(maxID < item._id):
-                    maxID = item._id
-            maxID = maxID + 1
-        return maxID
-    
+        if self.quantityStudent() == 0:
+            return 1
+        return max(student._id for student in self.listStudent) + 1
+
     def addStudentToList(self):
         studentId = self.generateID()
-        studentName = input("Nhap ten sinh vien: ")
-        sex = input("Nhap gioi tinh sinh vien: ")
-        major = input("Nhap nganh hoc cua sinh vien: ")
-        avgScore = float(input("Nhap diem sinh vien: "))
-        student = Student(studentId, studentName, sex, major, avgScore)
+        studentName = input("Nhập tên sinh viên: ")
+        sex = input("Nhập giới tính sinh viên: ")
+        major = input("Nhập ngành học của sinh viên: ")
+        avgScore = float(input("Nhập điểm sinh viên: "))
+        student = Student(studentId, studentName, major, sex, avgScore)
         self.rating(student)
         self.listStudent.append(student)
 
-    def rating(self, student:Student):
-        if student._agvScore >= 8.5:
-            student._study = "Gioi"
-        elif student._agvScore >= 6.5:
-            student._study = "Kha"
-        elif student._agvScore >= 5:
-            student._study = "Trung binh"
+    def rating(self, student: Student):
+        if student._avgScore >= 8.5:
+            student._academicRanking = "Giỏi"
+        elif student._avgScore >= 6.5:
+            student._academicRanking = "Khá"
+        elif student._avgScore >= 5:
+            student._academicRanking = "Trung bình"
         else:
-            student._study ="Yeu"
+            student._academicRanking = "Yếu"
 
     def updateStudent(self, Id):
-        student:Student = self.findByID()
-        if student != None:
-            studentName = input("Nhap ten sinh vien: ")
-            sex = input("Nhap gioi tinh sinh vien: ")
-            major = input("Nhap nganh hoc cua sinh vien: ")
-            avgScore = float(input("Nhap diem sinh vien: "))
-            student._name = studentName
-            student._major = major
-            student._sex = sex
-            student._avgScore = avgScore
-            student._study = self.rating(student)
+        student: Student = self.findByID(Id)
+        if student is not None:
+            student._name = input("Nhập tên sinh viên: ")
+            student._sex = input("Nhập giới tính sinh viên: ")
+            student._major = input("Nhập ngành học của sinh viên: ")
+            student._avgScore = float(input("Nhập điểm sinh viên: "))
+            self.rating(student)
 
     def findByID(self, ID):
-        searchResult = None
-        if (self.quantityStudent() > 0):
-            for item in self.listStudent:
-                if item._id == ID:
-                    searchResult = item
-        return searchResult
-    
+        for student in self.listStudent:
+            if student._id == ID:
+                return student
+        return None
+
     def sortByID(self):
-        self.listStudent.sort(key=lambda x: x._id, reverse=False)
+        self.listStudent.sort(key=lambda x: x._id)
 
     def sortByName(self):
-        self.listStudent.sort(key=lambda x: x._name, reverse=False)
+        self.listStudent.sort(key=lambda x: x._name.lower())
 
     def sortByAvgScore(self):
-        self.listStudent.sort(key=lambda x: x._avgScore, reverse=False)
+        self.listStudent.sort(key=lambda x: x._avgScore)
 
+    def findByName(self, keyword):
+        keyword = keyword.lower()
+        return [student for student in self.listStudent
+                if keyword in student._name.lower()]
 
+    def deleteById(self, id):
+        student = self.findByID(id)
+        if student:
+            self.listStudent.remove(student)
+            print("Xóa sinh viên thành công!")
+            return True
+        print("Không tìm thấy sinh viên để xóa!")
+        return False
 
+    def showListStudent(self, student_list):
+        if not student_list:
+            print("Danh sách sinh viên trống!")
+            return
 
+        print(
+            "{:<10} {:<20} {:<10} {:<20} {:<10} {:<15}".format(
+                "ID", "Name", "Sex", "Major", "Avg Score", "Academic Rank"
+            )
+        )
+        print("-" * 80)
+        for student in student_list:
+            print(
+                "{:<10} {:<20} {:<10} {:<20} {:<10.2f} {:<15}".format(
+                    student._id, student._name, student._sex,
+                    student._major, student._avgScore, student._academicRanking
+                )
+            )
 
-        
+    def getListStudent(self):
+        return self.listStudent
