@@ -28,7 +28,7 @@ def decrypt():
     text = request.form['inputCipherText']
     key = int(request.form['inputKeyCipher'])
     Caesar = CaesarCipher()
-    decrypted_text = Caesar.decypt_text(text, key)
+    decrypted_text = Caesar.decrypt_text(text, key)
     return f"text: {text}<br>key: {key}<br>decrypted_text: {decrypted_text}"
 
 
