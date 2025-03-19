@@ -26,6 +26,7 @@ def caesar_encypt():
 
 @app.route("/api/caesar/decrypt", methods=["POST"])
 def caesar_decrypt():
+    print("into decrypt")
     data = request.json
     cipher_text = data['cipher_text']
     key = int(data['key'])
