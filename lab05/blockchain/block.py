@@ -15,4 +15,3 @@ class Block:
                 str(self.timestamp) + str(self.transactions) +
                 str(self.proof))
         return hashlib.sha256(data.encode()).hexdigest()
-
